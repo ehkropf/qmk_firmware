@@ -16,6 +16,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 
+enum local_keycodes
+{
+    LED_1 = SAFE_RANGE,
+    LED_2,
+    LED_3,
+    LED_4
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 //      ESC      F1       F2       F3       F4       F5       F6       F7       F8       F9       F10      F11      F12	     Prt           Rotary(Mute)
@@ -30,7 +38,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // cable to get the board into bootloader mode - definitely not fun when you're working on your QMK builds. Remove this and put it back to KC_RGUI
     // if that's your preference.
     //
-    // To put the keyboard in bootloader mode, use FN+backslash. If you accidentally put it into bootloader, you can just unplug the USB cable and
+    // To put the keyboard in bootloader mode, use FN+#. If you accidentally put it into bootloader, you can just unplug the USB cable and
     // it'll be back to normal when you plug it back in.
     [0] = LAYOUT(
         KC_ESC,         KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,   KC_F11,   KC_F12,   RGB_TOG, KC_MUTE,
@@ -43,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [1] = LAYOUT(
         KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,            KC_MUTE,
-        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,            KC_NO,
+        KC_NO,   LED_1,   LED_2,   LED_3,   LED_4,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,            RGB_TOG,
         KC_NO,   KC_MRWD, KC_MPLY, KC_MFFD, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_BRID, KC_BRIU,                   KC_NO,
         KC_LCTL, KC_NO,   KC_VOLD, KC_VOLU, KC_MUTE, KC_NO,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_NO,   KC_NO,   RESET,   KC_NO,            RGB_MOD,
         KC_LSFT, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,            KC_RSFT, RGB_VAI, RGB_RMOD,
@@ -52,11 +60,40 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
-bool encoder_update_user(uint8_t index, bool clockwise) {
+bool encoder_update_user(uint8_t index, bool clockwise)
+{
     if (clockwise) {
-      tap_code(KC_VOLU);
+        tap_code(KC_VOLU);
     } else {
-      tap_code(KC_VOLD);
+        tap_code(KC_VOLD);
+    }
+    return true;
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record)
+{
+    static bool splashing = false;
+    switch(keycode)
+    {
+        case LED_2:
+            splashing = false;
+            rgb_matrix_mode(RGB_MATRIX_BREATHING);
+            break;
+        case LED_3:
+            splashing = false;
+            rgb_matrix_mode(RGB_MATRIX_BAND_SPIRAL_SAT);
+            break;
+        case LED_4:
+            splashing = false;
+            rgb_matrix_mode(RGB_MATRIX_CYCLE_LEFT_RIGHT);
+            break;
+        case LED_1:
+            splashing = true;
+        default:
+            if (rgb_matrix_is_enabled() && splashing)
+            {
+                rgb_matrix_mode(RGB_MATRIX_MULTISPLASH);
+            }
     }
     return true;
 }

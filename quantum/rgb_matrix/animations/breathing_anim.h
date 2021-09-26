@@ -6,6 +6,7 @@ bool BREATHING(effect_params_t* params) {
     RGB_MATRIX_USE_LIMITS(led_min, led_max);
 
     HSV      hsv  = rgb_matrix_config.hsv;
+    hsv.h = 170;
     uint16_t time = scale16by8(g_rgb_timer, rgb_matrix_config.speed / 8);
     hsv.v         = scale8(abs8(sin8(time) - 128) * 2, hsv.v);
     RGB rgb       = rgb_matrix_hsv_to_rgb(hsv);
