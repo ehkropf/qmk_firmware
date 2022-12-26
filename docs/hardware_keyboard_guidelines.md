@@ -87,6 +87,7 @@ The `config.h` files can also be placed in sub-folders, and the order in which t
     * `keyboards/top_folder/sub_1/sub_2/config.h`
       * `keyboards/top_folder/sub_1/sub_2/sub_3/config.h`
         * `keyboards/top_folder/sub_1/sub_2/sub_3/sub_4/config.h`
+          * [`.build/objs_<keyboard>/src/info_config.h`](data_driven_config.md#add-code-to-generate-it) see [Data Driven Configuration](data_driven_config.md)
           * `users/a_user_folder/config.h`
           * `keyboards/top_folder/keymaps/a_keymap/config.h`
         * `keyboards/top_folder/sub_1/sub_2/sub_3/sub_4/post_config.h`
@@ -254,8 +255,6 @@ The year should be the first year the file is created. If work was done to that 
 ## License
 
 The core of QMK is licensed under the [GNU General Public License](https://www.gnu.org/licenses/licenses.en.html). If you are shipping binaries for AVR processors you may choose either [GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html) or [GPLv3](https://www.gnu.org/licenses/gpl.html). If you are shipping binaries for ARM processors you must choose [GPL Version 3](https://www.gnu.org/licenses/gpl.html) to comply with the [ChibiOS](https://www.chibios.org) GPLv3 license.
-
-If your keyboard makes use of the [uGFX](https://ugfx.io) features within QMK you must comply with the [uGFX License](https://ugfx.io/license.html), which requires a separate commercial license before selling a device containing uGFX.
 
 ## Technical Details
 
